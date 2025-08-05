@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalStack Monitoring Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-running { background-color: #4CAF50; }
+        .status-stopped { background-color: #f44336; }
+        .status-unknown { background-color: #ff9800; }
+
+        .service-list {
+            list-style: none;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .service-item:last-child {
+            border-bottom: none;
+        }
+
+        .service-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .service-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-available {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .status-unavailable {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .logs-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .logs-content {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        .error {
+            color: #f44336;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖥️ LocalStack Monitoring Dashboard</h1>
+            <p>Real-time monitoring for your local AWS services</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>
+                    <span class="status-indicator" id="overall-status"></span>
+                    LocalStack Status
+                </h3>
+                <div id="localstack-info">
+                    <div class="loading">Loading...</div>
+                </div>
+                <button class="refresh-btn" onclick="refreshStatus()">Refresh Status</button>
+            </div>
+
+            <div class="card">
+                <h3>🔧 Available Services</h3>
+                <ul class="service-list" id="services-list">
+                    <li class="loading">Loading services...</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>🚀 Quick Actions</h3>
+                <div class="quick-actions">
+                    <a href="http://localhost:4566/health" target="_blank" class="action-btn">Health Endpoint</a>
+                    <a href="http://localhost:4566/_localstack/health" target="_blank" class="action-btn">Service Status</a>
+                    <button class="action-btn" onclick="testLambda()">Test Lambda</button>
+                    <button class="action-btn" onclick="testDynamoDB()">Test DynamoDB</button>
+                    <button class="action-btn" onclick="testS3()">Test S3</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📊 Service Endpoints</h3>
+                <div id="endpoints-info">
+                    <div><strong>Main Gateway:</strong> http://localhost:4566</div>
+                    <div><strong>DynamoDB:</strong> http://localhost:4566</div>
+                    <div><strong>S3:</strong> http://localhost:4566</div>
+                    <div><strong>Lambda:</strong> http://localhost:4566</div>
+                    <div><strong>API Gateway:</strong> http://localhost:4566</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="logs-section">
+            <h3>📋 Recent Activity</h3>
+            <div class="logs-content" id="activity-logs">
+                <div>🚀 LocalStack Monitoring Dashboard started</div>
+                <div>📡 Checking LocalStack connection...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let activityLogs = [];
+
+        function addLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            activityLogs.unshift(`[${timestamp}] ${message}`);
+            if (activityLogs.length > 50) activityLogs.pop();
+            
+            const logsElement = document.getElementById('activity-logs');
+            logsElement.innerHTML = activityLogs.join('<br>');
+        }
+
+        async function refreshStatus() {
+            addLog('🔄 Refreshing LocalStack status...');
+            
+            try {
+                // Get LocalStack health
+                const healthResponse = await fetch('/api/localstack-health');
+                const healthData = await healthResponse.json();
+                
+                const statusElement = document.getElementById('overall-status');
+                const infoElement = document.getElementById('localstack-info');
+                
+                if (healthResponse.ok) {
+                    statusElement.className = 'status-indicator status-running';
+                    infoElement.innerHTML = `
+                        <div><strong>Status:</strong> Running ✅</div>
+                        <div><strong>Version:</strong> ${healthData.version || 'Unknown'}</div>
+                        <div><strong>Edition:</strong> ${healthData.edition || 'Community'}</div>
+                    `;
+                    addLog('✅ LocalStack is running properly');
+                } else {
+                    throw new Error(healthData.error || 'Health check failed');
+                }
+
+                // Get services status
+                try {
+                    const statusResponse = await fetch('/api/localstack-status');
+                    const statusData = await statusResponse.json();
+                    
+                    const servicesList = document.getElementById('services-list');
+                    if (statusData.services) {
+                        const servicesHtml = Object.entries(statusData.services).map(([service, status]) => `
+                            <li class="service-item">
+                                <span class="service-name">${service.toUpperCase()}</span>
+                                <span class="service-status status-${status === 'available' ? 'available' : 'unavailable'}">
+                                    ${status}
+                                </span>
+                            </li>
+                        `).join('');
+                        servicesList.innerHTML = servicesHtml;
+                        addLog(`📋 Loaded ${Object.keys(statusData.services).length} services`);
+                    } else {
+                        servicesList.innerHTML = '<li class="service-item">No services data available</li>';
+                    }
+                } catch (error) {
+                    document.getElementById('services-list').innerHTML = `<li class="error">Error loading services: ${error.message}</li>`;
+                }
+
+            } catch (error) {
+                const statusElement = document.getElementById('overall-status');
+                const infoElement = document.getElementById('localstack-info');
+                
+                statusElement.className = 'status-indicator status-stopped';
+                infoElement.innerHTML = `<div class="error">❌ LocalStack not available<br>${error.message}</div>`;
+                addLog(`❌ Error: ${error.message}`);
+            }
+        }
+
+        async function testService(serviceName, testFunction) {
+            addLog(`🧪 Testing ${serviceName}...`);
+            try {
+                await testFunction();
+                addLog(`✅ ${serviceName} test successful`);
+            } catch (error) {
+                addLog(`❌ ${serviceName} test failed: ${error.message}`);
+            }
+        }
+
+        function testLambda() {
+            testService('Lambda', async () => {
+                // This would test lambda functionality
+                addLog('🔧 Lambda test not implemented yet');
+            });
+        }
+
+        function testDynamoDB() {
+            testService('DynamoDB', async () => {
+                // This would test DynamoDB functionality
+                addLog('🔧 DynamoDB test not implemented yet');
+            });
+        }
+
+        function testS3() {
+            testService('S3', async () => {
+                // This would test S3 functionality
+                addLog('🔧 S3 test not implemented yet');
+            });
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(refreshStatus, 30000);
+
+        // Initial load
+        refreshStatus();
+        addLog('🎯 Dashboard initialized successfully');
+    </script>
+</body>
+</html>

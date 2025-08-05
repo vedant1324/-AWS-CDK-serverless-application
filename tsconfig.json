@@ -20,12 +20,14 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
+    "isolatedModules": true,
     "typeRoots": [
       "./node_modules/@types"
     ]
   },
   "exclude": [
     "node_modules",
-    "cdk.out"
+    "cdk.out",
+    "archive"
   ]
 }
