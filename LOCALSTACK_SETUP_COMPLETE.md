@@ -8,6 +8,9 @@ You tried to install LocalStack and encountered the common issue that it's not a
 
 ### **1. 📦 Built-in Mock Services (Currently Working)**
 ```bash
+# Build TypeScript files first
+npm run build
+
 # Direct Lambda testing
 npm run test-local
 
@@ -20,9 +23,13 @@ npm run start-api      # Then test at http://localhost:3000
 - Mock S3 with file operations  
 - Complete AWS API simulation
 - Zero dependencies, works offline
+- **Important:** Requires TypeScript compilation first
 
 ### **2. 🐳 LocalStack Setup (Available When Needed)**
 ```bash
+# Build TypeScript files first
+npm run build
+
 # If Docker Desktop is running:
 npm run start-localstack
 
@@ -30,7 +37,7 @@ npm run start-localstack
 npm run test-with-localstack
 ```
 
-**Status:** 🔧 **Ready to use** (requires Docker Desktop)
+**Status:** 🔧 **Ready to use** (requires Docker Desktop + build step)
 - Real AWS API compatibility
 - Perfect for integration testing
 - Docker compose configuration included
@@ -39,7 +46,7 @@ npm run test-with-localstack
 ### **3. ☁️ Real AWS (Production Ready)**
 ```bash
 # When ready for production:
-cdk deploy --all
+npm run deploy
 ```
 
 **Status:** 🚀 **Production ready**
@@ -48,6 +55,14 @@ cdk deploy --all
 - All tests passing
 
 ## **🎯 Current Working Commands**
+
+### **Essential First Step**
+```bash
+# Always build TypeScript files first
+npm run build
+```
+
+### **Then Choose Your Testing Method**
 
 ```bash
 # Immediate testing (works right now)

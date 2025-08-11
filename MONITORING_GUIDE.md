@@ -2,14 +2,13 @@
 
 ## 🚀 Project Overview
 
-This serverless application now includes enterprise-grade monitoring, observability, and multi-environment support with:
+This serverless application includes comprehensive monitoring and observability with:
 
 - **Structured Logging**: Winston-based JSON logging with correlation IDs
 - **Custom Metrics**: CloudWatch metrics for business and technical KPIs
 - **X-Ray Tracing**: Distributed tracing for performance insights
 - **CloudWatch Dashboards**: Real-time monitoring with visual insights
 - **Automated Alerts**: SNS-based alerting for critical issues
-- **Environment Management**: Separate configurations for dev/staging/prod
 
 ## 📊 Monitoring Features
 
@@ -32,72 +31,27 @@ This serverless application now includes enterprise-grade monitoring, observabil
 - **Throttling**: Any Lambda or DynamoDB throttles
 - **Service Health**: API Gateway 5xx errors > 5 in 5 minutes
 
-## 🌍 Environment Management
-
-### Development Environment (`dev`)
-```bash
-npm run deploy:dev
-```
-- **Purpose**: Local development and testing
-- **Resources**: Minimal capacity, short log retention
-- **Monitoring**: Basic alerts to dev team
-- **Cost**: Optimized for development
-
-### Staging Environment (`staging`)
-```bash
-npm run deploy:staging
-```
-- **Purpose**: Pre-production testing and validation
-- **Resources**: Production-like capacity
-- **Monitoring**: Full monitoring with staging alerts
-- **Cost**: Balanced performance and cost
-
-### Production Environment (`prod`)
-```bash
-npm run deploy:prod
-```
-- **Purpose**: Live production workloads
-- **Resources**: High availability, long retention
-- **Monitoring**: Comprehensive alerts to ops team
-- **Cost**: Optimized for performance and reliability
-
 ## 🔧 Deployment Commands
 
-### Quick Deployment
+### Basic Deployment
 ```bash
-# Deploy to development
-npm run deploy:dev
+# Deploy all stacks to AWS
+npm run deploy
 
-# Deploy to staging
-npm run deploy:staging
-
-# Deploy to production (use with caution!)
-npm run deploy:prod
-```
-
-### Advanced Operations
-```bash
 # View changes before deployment
-npm run diff:dev
-npm run diff:staging
-npm run diff:prod
+npm run diff
 
 # Generate CloudFormation templates
-npm run synth:dev
-npm run synth:staging
-npm run synth:prod
+npm run synth
 
-# Destroy environments (careful!)
-npm run destroy:dev
-npm run destroy:staging
+# Destroy all resources (use with caution!)
+npm run destroy
 ```
 
 ### Monitoring Access
 ```bash
-# Open monitoring dashboards
-npm run monitor:dev
-npm run monitor:staging
-npm run monitor:prod
+# Open CloudWatch monitoring dashboard
+npm run monitor
 ```
 
 ## 📈 Key Metrics to Monitor

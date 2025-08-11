@@ -6,10 +6,13 @@
 ✅ **Already Working** - No additional setup needed
 
 ```bash
+# Build TypeScript files first
+npm run build
+
 # Test with built-in mocks
 npm run test-local
 
-# Start API server
+# Start API server (after building)
 npm run start-api
 ```
 
@@ -19,14 +22,19 @@ npm run start-api
 - ✅ Complete control over test data
 - ✅ Works offline
 
+**Note:** Scripts require building TypeScript first (`npm run build`)
+
 ### **2. 🐳 LocalStack (AWS Service Emulation)**
 ⚙️ **Requires Docker Desktop**
 
 ```bash
+# Build TypeScript files
+npm run build
+
 # Start LocalStack (requires Docker Desktop to be running)
 npm run start-localstack
 
-# Test with LocalStack
+# Test with LocalStack (after building)
 npm run test-with-localstack
 ```
 
@@ -39,6 +47,7 @@ npm run test-with-localstack
 **Requirements:**
 - Docker Desktop must be running
 - AWS CLI installed (optional but recommended)
+- TypeScript compilation (`npm run build`)
 
 ### **3. ☁️ Real AWS (Production Testing)**
 ```bash
