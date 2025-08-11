@@ -117,24 +117,12 @@ This application includes comprehensive monitoring with:
 - `DEVELOPMENT_GUIDE.md` - Development best practices and guidelines
 - `AWS_MOCK_TESTING_RESULTS.md` - LocalStack testing results
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
 
-For support and questions:
-- Create an issue in the GitHub repository
-- Check the documentation files for detailed guides
-- Review the monitoring guide for operational questions
 
 ### Single Environment Setup
 This application is configured for development and testing with:
@@ -142,7 +130,6 @@ This application is configured for development and testing with:
 - **Resources**: Optimal configuration for cost and performance
 - **Monitoring**: Comprehensive logging and alerting
 - **Cost**: Balanced for development efficiency and production readiness
-
 
 
 ## 🔧 Available NPM Scripts
@@ -216,17 +203,3 @@ GET    /files/{fileName}    # Download file
 7. Push to branch (`git push origin feature/amazing-feature`)
 8. Open a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-- **Issues**: [GitHub Issues](https://github.com/vedant1324/-AWS-CDK-serverless-application/issues)
-- **Documentation**: Check the `/docs` folder for detailed guides
-- **Monitoring**: Use `npm run monitor` to access dashboard
-- **Local Testing**: Use LocalStack for AWS service emulation
-
----
-
-**🎯 Production-Ready**: This application follows AWS best practices for security, monitoring, and scalability, ready for development and production deployment. 
