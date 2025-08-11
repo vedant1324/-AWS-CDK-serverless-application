@@ -50,8 +50,10 @@ aws-cdk/
 │   └── 📁 interfaces/
 │       └── stack-props.ts            # TypeScript interfaces
 ├── 📁 scripts/
-│   ├── test-direct-localstack.js     # LocalStack integration tests
-│   └── final-demo.js                 # Comprehensive demo script
+│   ├── test-direct-localstack.ts    # LocalStack integration tests
+│   ├── final-demo.ts                # Comprehensive demo script  
+│   ├── mock-api-server.ts           # Local API server
+│   └── test-lambda-locally.ts       # Local Lambda testing
 ├── 📁 test/
 │   ├── infrastructure.test.ts        # CDK stack tests
 │   └── lambda-handler.test.ts        # Lambda function tests
@@ -68,8 +70,8 @@ aws-cdk/
 
 ### Installation
 ```bash
-git clone <repository-url>
-cd aws-cdk-serverless-app
+git clone https://github.com/vedant1324/-AWS-CDK-serverless-application.git
+cd -AWS-CDK-serverless-application
 npm install
 ```
 
@@ -80,28 +82,28 @@ cdk bootstrap
 cdk deploy --all
 
 # Local development with LocalStack
-npm run start:localstack
+npm run start-localstack
 npm test
 ```
 
 ### Testing
 ```bash
-npm test                    # Run all tests
-npm run test:integration    # Integration tests with LocalStack
-npm run test:watch         # Watch mode for development
+npm test                           # Run all tests
+npm run test-with-localstack      # Integration tests with LocalStack
+npm run test-direct-localstack    # Direct LocalStack integration tests
 ```
 
 ## 📊 Monitoring & Observability
 
 This application includes comprehensive monitoring with:
 
-- **CloudWatch Dashboards**: Real-time metrics and visualizations
-- **SNS Alerts**: Automated notifications for critical events
+- **CloudWatch Dashboards**: Real-time metrics and visualizations  
+- **SNS Alerts**: Automated notifications for critical events (requires manual connection)
 - **Structured Logging**: Winston-based logging with correlation IDs
 - **Performance Metrics**: Custom metrics for application health
 - **LocalStack Integration**: Local development and testing environment
 
-Access the monitoring dashboard at `/monitoring/index.html` after deployment.
+> **Note**: Monitoring stack exists but requires connection to API/Lambda resources for full functionality.
 
 ## 🧪 Testing
 
@@ -147,29 +149,30 @@ This application is configured for development and testing with:
 
 ```bash
 # Development
-npm run build              # Compile TypeScript
-npm run watch              # Watch mode compilation
-npm run test               # Run unit tests
+npm run build                     # Compile TypeScript
+npm run watch                     # Watch mode compilation
+npm test                          # Run unit tests
 
 # Local Testing
-npm run test-local         # Test Lambda with mocks
-npm run test-with-localstack # Test with LocalStack
-npm run start-api          # Start mock API server
+npm run test-local                # Test Lambda with mocks
+npm run test-with-localstack      # Test with LocalStack
+npm run test-direct-localstack    # Direct LocalStack integration tests
+npm run start-api                 # Start mock API server
 
 # LocalStack Management
-npm run start-localstack   # Start LocalStack services
-npm run stop-localstack    # Stop LocalStack services
-npm run open-localstack-monitor # Open LocalStack web dashboard
-npm run monitor-localstack # Start monitoring server only
+npm run start-localstack          # Start LocalStack services
+npm run stop-localstack           # Stop LocalStack services
+npm run monitor-localstack        # Monitor LocalStack
+npm run open-localstack-monitor   # Open LocalStack web dashboard
 
 # Deployment
-npm run deploy             # Deploy to AWS
-npm run destroy            # Destroy AWS resources
-npm run diff               # Compare changes
-npm run synth              # Generate CloudFormation templates
+npm run deploy                    # Deploy to AWS
+npm run destroy                   # Destroy AWS resources
+npm run diff                      # Compare changes
+npm run synth                     # Generate CloudFormation templates
 
 # Monitoring
-npm run monitor            # Open AWS CloudWatch dashboard
+npm run monitor                   # Open AWS CloudWatch dashboard
 ```
 
 ## 🛠️ API Endpoints
@@ -180,21 +183,21 @@ GET /health
 ```
 Returns service health status and connectivity checks.
 
-### User Management
+### User Management  
 ```
 GET    /users              # List all users
 POST   /users              # Create new user
 GET    /users/{id}          # Get specific user
-PUT    /users/{id}          # Update user
-DELETE /users/{id}          # Delete user
 ```
 
 ### File Management
 ```
 GET    /files              # List files
 POST   /files              # Upload file
-GET    /files/{key}         # Download file
+GET    /files/{fileName}    # Download file
 ```
+
+> **Note**: PUT and DELETE operations are implemented in `enhanced-handler.ts` but not currently active. To enable full CRUD, update the Lambda construct to use `enhanced-handler.js` instead of `index.js`.
 
 ## 📚 Additional Documentation
 
@@ -219,7 +222,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 Support
 
-- **Issues**: [GitHub Issues](https://github.com/your-repo/issues)
+- **Issues**: [GitHub Issues](https://github.com/vedant1324/-AWS-CDK-serverless-application/issues)
 - **Documentation**: Check the `/docs` folder for detailed guides
 - **Monitoring**: Use `npm run monitor` to access dashboard
 - **Local Testing**: Use LocalStack for AWS service emulation

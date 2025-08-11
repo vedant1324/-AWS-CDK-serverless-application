@@ -26,4 +26,8 @@ const monitoringStack = new MonitoringStack(app, 'MonitoringStack', {
   env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION }
 });
 
+// Connect monitoring to resources
+monitoringStack.addLambdaMonitoring('MyApiLambda', apiStack.lambda);
+monitoringStack.addApiGatewayMonitoring('MyApi', apiStack.api);
+
 app.synth();
